@@ -381,12 +381,26 @@ const AdminLeaderboard = () => {
   const fetchLeaderboardData = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await getModuleLeaderboard(selectedModule);
-      console.log(response)
+      console.log('Leaderboard response:', response);
+      
+      if (!response.data || !response.data.leaderboard) {
+        throw new Error('Invalid response format from server');
+      }
+      
       setLeaderboardData(response.data.leaderboard);
       setCurrentStudent(response.data.currentStudent);
     } catch (err) {
-      setError('Failed to fetch leaderboard data');
+      console.error('Error fetching leaderboard:', err);
+      setError(err.response?.data?.message || 'Failed to fetch leaderboard data. Please try again.');
+      
+      // Retry logic for network errors
+      if (err.message === 'Network Error' || !err.response) {
+        setTimeout(() => {
+          fetchLeaderboardData();
+        }, 2000); // Retry after 2 seconds
+      }
     } finally {
       setLoading(false);
     }

@@ -205,16 +205,27 @@ export const markModuleAsCompleted = async (moduleId) => {
 
 // Leaderboard API
 export const getModuleLeaderboard = async (moduleId, examType) => {
-  const studentData = JSON.parse(localStorage.getItem('studentData'));
-  if (!studentData?._id) {
-    return Promise.reject(new Error('Student data not found'));
-  }
-  return api.get(`/student/module/${moduleId}/leaderboard`, {
-    params: {
-      examType,
-      studentId: studentData._id
+  try {
+    const response = await api.get(`/student/module/${moduleId}/leaderboard`, {
+      params: {
+        examType
+      }
+    });
+    return response;
+  } catch (error) {
+    console.error('Leaderboard API Error:', error);
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      throw new Error(error.response.data.message || 'Failed to fetch leaderboard data');
+    } else if (error.request) {
+      // The request was made but no response was received
+      throw new Error('No response from server. Please check your internet connection.');
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      throw new Error('Error setting up the request');
     }
-  });
+  }
 };
 
 // Staff APIs
