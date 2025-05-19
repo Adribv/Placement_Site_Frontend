@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginStaff } from '../services/api';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,7 +10,17 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Alert from '@mui/material/Alert';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
+import styled from 'styled-components';
+
+const StyledLink = styled(Link)`
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.875rem;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const StaffLogin = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -112,14 +122,14 @@ const StaffLogin = () => {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/student/login" variant="body2">
-                  {"Student Login"}
-                </Link>
+                <StyledLink to="/student/login">
+                  Student Login
+                </StyledLink>
               </Grid>
               <Grid item sx={{ ml: 'auto' }}>
-                <Link href="/admin/login" variant="body2">
-                  {"Admin Login"}
-                </Link>
+                <StyledLink to="/admin/login">
+                  Admin Login
+                </StyledLink>
               </Grid>
             </Grid>
           </Box>
