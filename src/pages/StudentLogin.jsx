@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { loginStudent } from '../services/api';
 
@@ -96,7 +96,7 @@ const LinkContainer = styled.div`
   border-top: 1px solid #e5e7eb;
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
   color: #2563eb;
   text-decoration: none;
   font-size: 0.875rem;
@@ -179,8 +179,8 @@ const StudentLogin = () => {
           </Button>
 
           <LinkContainer>
-            <StyledLink href="/admin/login">Admin Login</StyledLink>
-            <StyledLink href="/staff/login">Staff Login</StyledLink>
+            <StyledLink to="/admin/login">Admin Login</StyledLink>
+            <StyledLink to="/staff/login">Staff Login</StyledLink>
           </LinkContainer>
         </Form>
       </LoginCard>
