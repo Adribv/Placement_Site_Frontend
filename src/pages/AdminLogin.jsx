@@ -96,6 +96,24 @@ const ErrorMessage = styled.div`
   margin-bottom: 1rem;
 `;
 
+const LinkContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+`;
+
+const StyledLink = styled.a`
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.875rem;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -152,6 +170,10 @@ const AdminLogin = () => {
           <Button type="submit" disabled={isLoading}>
             {isLoading ? 'Logging in...' : 'Login'}
           </Button>
+          <LinkContainer>
+            <StyledLink href="/student/login">Student Login</StyledLink>
+            <StyledLink href="/staff/login">Staff Login</StyledLink>
+          </LinkContainer>
         </Form>
       </FormContainer>
     </Container>

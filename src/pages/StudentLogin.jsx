@@ -88,6 +88,24 @@ const ErrorMessage = styled.div`
   margin-top: 0.5rem;
 `;
 
+const LinkContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+`;
+
+const StyledLink = styled.a`
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.875rem;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const StudentLogin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -159,6 +177,11 @@ const StudentLogin = () => {
           <Button type="submit" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </Button>
+
+          <LinkContainer>
+            <StyledLink href="/admin/login">Admin Login</StyledLink>
+            <StyledLink href="/staff/login">Staff Login</StyledLink>
+          </LinkContainer>
         </Form>
       </LoginCard>
     </Container>
