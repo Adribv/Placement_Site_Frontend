@@ -5,6 +5,7 @@ import { getStudentProfile } from '../services/api';
 import StudentAvatar from '../components/student/StudentAvatar';
 import ProgressSummary from '../components/student/ProgressSummary';
 import TrainingModulesList from '../components/student/TrainingModulesList';
+import AttendanceLog from '../components/student/AttendanceLog';
 
 const Container = styled.div`
   padding: 2rem;
@@ -248,14 +249,14 @@ const StudentDashboard = () => {
       </DashboardHeader>
       <ProgressSummary 
         totalModules={modules.length}
-        completedModules={modules.filter(m => m.isCompleted).length}
+        completedModules={studentData.numTrainingsCompleted || 0}
         averageScore={calculateAverageScore(modules)}
         attendancePercentage={calculateAttendancePercentage(modules)}
-        placementCategory={studentData.batch}
       />
       <TrainingModulesList 
         modules={modules}
       />
+      <AttendanceLog />
     </Container>
   );
 };

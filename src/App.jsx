@@ -11,6 +11,8 @@ import AdminLayout from './components/admin/AdminLayout';
 import BulkUpload from './components/admin/BulkUpload';
 import ScoreUpload from './components/admin/ScoreUpload';
 import TrainingModuleView from './components/admin/TrainingModuleView';
+import AdminAttendance from './pages/admin/AdminAttendance';
+import AdminDetailedAttendance from './pages/admin/AdminDetailedAttendance';
 
 // Student imports
 import StudentView from './pages/StudentView';
@@ -18,16 +20,21 @@ import StudentLogin from './pages/StudentLogin';
 import StudentDashboard from './pages/StudentDashboard';
 import ProtectedRoute from './components/student/ProtectedRoute';
 import Leaderboard from './pages/Leaderboard';
+import StudentDetailedAttendance from './pages/student/StudentDetailedAttendance';
+import StudentAttendanceDetails from './pages/student/StudentAttendanceDetails';
 
 // Other imports
 import Students from './pages/Students';
 import NotFound from './pages/NotFound';
 
-// Staff imports - now restored
+// Staff imports
 import StaffLogin from './pages/StaffLogin';
 import StaffDashboard from './pages/StaffDashboard';
 import ProtectedStaffRoute from './components/staff/ProtectedStaffRoute';
 import StaffManagement from './pages/StaffManagement';
+import StaffAttendance from './pages/staff/StaffAttendance';
+import StaffDetailedAttendance from './pages/staff/StaffDetailedAttendance';
+import AttendanceView from './pages/AttendanceView';
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
@@ -60,6 +67,8 @@ function App() {
             <Route path="scores" element={<ScoreUpload />} />
             <Route path="training" element={<TrainingModuleView />} />
             <Route path="staff" element={<StaffManagement />} />
+            <Route path="attendance" element={<AdminAttendance />} />
+            <Route path="attendance/detailed" element={<AdminDetailedAttendance />} />
           </Route>
           
           {/* Student Routes */}
@@ -74,9 +83,11 @@ function App() {
           >
             <Route path="dashboard" element={<StudentDashboard />} />
             <Route path="leaderboard" element={<Leaderboard />} />
+            <Route path="attendance" element={<StudentAttendanceDetails />} />
+            <Route path="attendance/detailed" element={<StudentDetailedAttendance />} />
           </Route>
 
-          {/* Staff Routes - now restored */}
+          {/* Staff Routes */}
           <Route path="/staff/login" element={<StaffLogin />} />
           <Route
             path="/staff"
@@ -87,9 +98,14 @@ function App() {
             }
           >
             <Route path="dashboard" element={<StaffDashboard />} />
+            <Route path="attendance" element={<StaffAttendance />} />
+            <Route path="attendance/detailed" element={<StaffDetailedAttendance />} />
           </Route>
 
-          {/* Public Routes */}
+          {/* Attendance View Route */}
+          <Route path="/attendance/view" element={<AttendanceView />} />
+
+          {/* Default Routes */}
           <Route path="/" element={<Navigate to="/student/login" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
