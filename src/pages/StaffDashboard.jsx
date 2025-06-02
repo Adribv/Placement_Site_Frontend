@@ -205,6 +205,24 @@ const StudentName = styled.div`
   margin-left: 0.5rem;
 `;
 
+const ViewLogsButton = styled.button`
+  background-color: #f0f7ff;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 1rem;
+  
+  &:hover {
+    background-color: #2563eb;
+    color: white;
+  }
+`;
+
 const ButtonGroup = styled.div`
   display: flex;
   gap: 0.5rem;
@@ -440,6 +458,10 @@ const StaffDashboard = () => {
     navigate('/staff/login');
   };
 
+  const handleViewLogs = (studentId) => {
+    navigate(`/staff/student-logs?studentId=${studentId}`);
+  };
+
   if (loading && !staff) {
     return (
       <Container>
@@ -537,6 +559,9 @@ const StaffDashboard = () => {
                       <StudentName>
                         {student.name} ({student.regNo})
                       </StudentName>
+                      <ViewLogsButton onClick={() => handleViewLogs(student._id)}>
+                        View Logs
+                      </ViewLogsButton>
                     </StudentItem>
                   ))}
                 </StudentList>

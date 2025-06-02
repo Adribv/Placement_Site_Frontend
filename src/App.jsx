@@ -35,6 +35,7 @@ import StaffManagement from './pages/StaffManagement';
 import StaffAttendance from './pages/staff/StaffAttendance';
 import StaffDetailedAttendance from './pages/staff/StaffDetailedAttendance';
 import AttendanceView from './pages/AttendanceView';
+import StaffStudentLogs from './pages/staff/StaffStudentLogs';
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem('isAdminAuthenticated') === 'true';
@@ -100,6 +101,7 @@ function App() {
             <Route path="dashboard" element={<StaffDashboard />} />
             <Route path="attendance" element={<StaffAttendance />} />
             <Route path="attendance/detailed" element={<StaffDetailedAttendance />} />
+            <Route path="student-logs" element={<StaffStudentLogs />} />
           </Route>
 
           {/* Attendance View Route */}

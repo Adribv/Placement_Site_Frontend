@@ -16,6 +16,7 @@ api.interceptors.request.use(
     // Check if the request is for student or staff endpoints
     const isStudentEndpoint = config.url.startsWith('/student');
     const isStaffEndpoint = config.url.startsWith('/staff');
+    const isAdminEndpoint = config.url.startsWith('/admin') || config.url.includes('/admin/');
     
     // Get the appropriate token based on the endpoint
     let token;
@@ -23,12 +24,20 @@ api.interceptors.request.use(
       token = localStorage.getItem('studentToken');
     } else if (isStaffEndpoint) {
       token = localStorage.getItem('staffToken');
-    } else {
+    } else if (isAdminEndpoint) {
       token = localStorage.getItem('adminToken');
+      // For admin endpoints, ensure we have a valid token
+      if (!token) {
+        console.error('No admin token found for admin endpoint:', config.url);
+        return Promise.reject(new Error('Authentication required'));
+      }
     }
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      // Ensure the token is properly formatted with 'Bearer' prefix
+      const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+      config.headers.Authorization = formattedToken;
+      console.log('Setting Authorization header for', config.url, ':', formattedToken);
     }
 
     // For form-data requests, remove Content-Type to let browser set it
@@ -50,6 +59,7 @@ api.interceptors.response.use(
       // Clear the appropriate token and data based on the endpoint
       const isStudentEndpoint = error.config.url.startsWith('/student');
       const isStaffEndpoint = error.config.url.startsWith('/staff');
+      const isAdminEndpoint = error.config.url.startsWith('/admin') || error.config.url.startsWith('/attendance');
       
       if (isStudentEndpoint) {
         localStorage.removeItem('studentToken');
@@ -59,7 +69,7 @@ api.interceptors.response.use(
         localStorage.removeItem('staffToken');
         localStorage.removeItem('staffData');
         window.location.href = '/staff/login';
-      } else {
+      } else if (isAdminEndpoint) {
         localStorage.removeItem('adminToken');
         window.location.href = '/admin/login';
       }

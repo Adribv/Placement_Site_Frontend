@@ -41,7 +41,7 @@ const CameraIconButton = styled(IconButton)`
 
 const StatusMessage = styled(Typography)`
   font-size: 0.75rem !important;
-  color: ${props => props.error ? '#d32f2f' : '#2e7d32'} !important;
+  color: ${props => props.$error ? '#d32f2f' : '#2e7d32'} !important;
   height: 20px;
 `;
 
@@ -162,7 +162,7 @@ const StaffAvatar = ({ name, profilePicture }) => {
       
       <Typography variant="subtitle1">{name || 'Staff'}</Typography>
       
-      <StatusMessage error={status.isError} variant="caption">
+      <StatusMessage $error={status.isError} variant="caption">
         {status.message}
       </StatusMessage>
     </ProfileContainer>

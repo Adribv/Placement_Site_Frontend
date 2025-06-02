@@ -5,6 +5,7 @@ import { getStudentDetails } from '../services/api';
 import StudentAvatar from '../components/student/StudentAvatar';
 import ProgressSummary from '../components/student/ProgressSummary';
 import TrainingModulesList from '../components/student/TrainingModulesList';
+import StudentAttendanceLogs from '../components/admin/StudentAttendanceLogs';
 
 const Container = styled.div`
   padding: 2rem;
@@ -112,6 +113,7 @@ const AdminStudentDashboard = () => {
       <TrainingModulesList 
         modules={modules}
       />
+      <StudentAttendanceLogs studentId={studentId} />
     </Container>
   );
 };

@@ -8,13 +8,16 @@ export const API_ENDPOINTS = {
   },
   STAFF: {
     MODULES: `${API_BASE_URL}/staff/modules`,
-    ATTENDANCE: `${API_BASE_URL}/attendance/module`
+    ATTENDANCE: `${API_BASE_URL}/attendance/module`,
+    STUDENT_ATTENDANCE: `${API_BASE_URL}/attendance/student`,
+    STUDENT_LOGS: `${API_BASE_URL}/attendance/student`,
+    STUDENTS: `${API_BASE_URL}/staff/students`
   },
   ADMIN: {
     MODULES: `${API_BASE_URL}/admin/modules`,
     ATTENDANCE: `${API_BASE_URL}/attendance/module`,
     STUDENTS: `${API_BASE_URL}/admin/students`,
-    STUDENT_ATTENDANCE: `${API_BASE_URL}/attendance/student`,
+    STUDENT_ATTENDANCE: `${API_BASE_URL}/attendance/admin/student`,
     CREATE_TEST_DATA: `${API_BASE_URL}/attendance/create-test-data`
   }
 };
