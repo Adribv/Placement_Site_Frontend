@@ -85,7 +85,10 @@ const ErrorMessage = styled.div`
 `;
 
 const batchTypes = ['Marquee', 'Super Dream', 'Dream', 'Service', 'General'];
-const departmentOptions = ['CSE', 'IT', 'MECH', 'EEE', 'ECE', 'BIOTECH', 'CIVIL'];
+const departmentOptions = [
+  'CSE', 'IT', 'EEE', 'ECE', 'CIVIL',
+  'BME', 'Bio Tech', 'AIML', 'BDA', 'CS', 'CC', 'IOT', 'GT', 'CSBS', 'Civil', 'Mech'
+];
 
 const Students = () => {
   const [students, setStudents] = useState([]);
@@ -114,7 +117,7 @@ const Students = () => {
       setStudents(response.data.students);
       setFilteredStudents(response.data.students);
       setError(null);
-    } catch (err) {
+    } catch {
       setError('Failed to fetch students');
     } finally {
       setLoading(false);

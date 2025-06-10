@@ -358,7 +358,7 @@ const AdminLeaderboard = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedModule) {
+    if (selectedModule !== undefined) {
       fetchLeaderboardData();
     }
   }, [selectedModule, examType]);
@@ -382,7 +382,13 @@ const AdminLeaderboard = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await getModuleLeaderboard(selectedModule);
+      let response;
+      if (!selectedModule) {
+        // Fetch leaderboard for all modules
+        response = await api.get('/admin/leaderboard/all-modules');
+      } else {
+        response = await getModuleLeaderboard(selectedModule);
+      }
       console.log('Leaderboard response:', response);
       
       if (!response.data || !response.data.leaderboard) {
@@ -536,10 +542,9 @@ const AdminLeaderboard = () => {
           value={selectedModule}
           onChange={(e) => setSelectedModule(e.target.value)}
         >
+          <option value="">All Modules</option>
           {modules.map(module => (
-            <option key={module._id} value={module._id}>
-              {module.title}
-            </option>
+            <option key={module._id} value={module._id}>{module.title}</option>
           ))}
         </Select>
 

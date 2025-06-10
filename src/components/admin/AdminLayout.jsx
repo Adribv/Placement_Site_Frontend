@@ -6,6 +6,9 @@ const LayoutContainer = styled.div`
   min-height: 100vh;
   display: flex;
   background-color: #f9fafb;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const Sidebar = styled.aside`
@@ -19,12 +22,21 @@ const Sidebar = styled.aside`
   overflow-x: hidden;
   transition: width 0.3s ease;
   z-index: 100;
+  @media (max-width: 900px) {
+    width: ${props => props.$isOpen ? '70vw' : '0'};
+    min-width: 0;
+    max-width: 100vw;
+  }
 `;
 
 const MainContent = styled.main`
   margin-left: ${props => props.$isOpen ? '250px' : '0'};
   padding: 2rem;
   transition: margin-left 0.3s ease;
+  @media (max-width: 900px) {
+    margin-left: 0;
+    padding: 0.5rem;
+  }
 `;
 
 const MenuButton = styled.button`

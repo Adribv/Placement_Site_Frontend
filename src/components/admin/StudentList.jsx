@@ -6,6 +6,10 @@ const Container = styled.div`
   padding: 1rem;
   max-width: 800px;
   margin: 0 auto;
+  @media (max-width: 600px) {
+    padding: 0.25rem;
+    max-width: 100vw;
+  }
 `;
 
 const Title = styled.h3`
@@ -21,6 +25,12 @@ const Table = styled.table`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 0.5rem;
   overflow: hidden;
+  @media (max-width: 700px) {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 0.95rem;
+  }
 `;
 
 const TableHead = styled.thead`
@@ -34,6 +44,10 @@ const TableHead = styled.thead`
 const TableHeader = styled.th`
   padding: 1rem;
   border-bottom: 1px solid #d1d5db;
+  @media (max-width: 700px) {
+    padding: 0.5rem;
+    font-size: 0.95rem;
+  }
 `;
 
 const TableRow = styled.tr`
@@ -48,6 +62,10 @@ const TableRow = styled.tr`
 
 const TableCell = styled.td`
   padding: 1rem;
+  @media (max-width: 700px) {
+    padding: 0.5rem;
+    font-size: 0.95rem;
+  }
 `;
 
 const StudentList = ({ students, batch, onStudentSelect }) => {

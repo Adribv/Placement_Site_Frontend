@@ -17,6 +17,7 @@ api.interceptors.request.use(
     const isStudentEndpoint = config.url.startsWith('/student');
     const isStaffEndpoint = config.url.startsWith('/staff');
     const isAdminEndpoint = config.url.startsWith('/admin') || config.url.includes('/admin/');
+    const isLoginEndpoint = config.url.endsWith('/login');
     
     // Get the appropriate token based on the endpoint
     let token;
@@ -24,7 +25,7 @@ api.interceptors.request.use(
       token = localStorage.getItem('studentToken');
     } else if (isStaffEndpoint) {
       token = localStorage.getItem('staffToken');
-    } else if (isAdminEndpoint) {
+    } else if (isAdminEndpoint && !isLoginEndpoint) {
       token = localStorage.getItem('adminToken');
       // For admin endpoints, ensure we have a valid token
       if (!token) {
@@ -93,14 +94,9 @@ export const getAllStudentsByBatch = (batch) => {
 };
 
 export const registerStudent = (studentData) => api.post('/admin/register-student', studentData);
-export const bulkRegisterStudents = (file, batch, passoutYear, department, location) => {
+export const bulkRegisterStudents = (file) => {
   const formData = new FormData();
   formData.append('excel', file);
-  formData.append('batch', batch);
-  formData.append('passoutYear', passoutYear);
-  formData.append('department', department);
-  formData.append('location', location);
-  
   return api.post('/admin/bulk-register', formData);
 };
 
@@ -284,9 +280,13 @@ export const updateStaffProfilePicture = (file) => {
 
 export const getStaffModules = () => api.get('/staff/modules');
 export const getModuleStudentsByLocation = (moduleId, location) => {
-  return api.get(`/staff/module/${moduleId}/students`, {
-    params: { location }
-  });
+  if (location) {
+    return api.get(`/staff/module/${moduleId}/students`, {
+      params: { location }
+    });
+  } else {
+    return api.get(`/staff/module/${moduleId}/students`);
+  }
 };
 export const updateStaffAttendance = (data) => api.post('/staff/attendance', data);
 

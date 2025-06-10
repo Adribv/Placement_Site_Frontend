@@ -6,18 +6,29 @@ import StudentAttendanceDetails from './StudentAttendanceDetails';
 
 const Container = styled.div`
   padding: 2rem;
+  @media (max-width: 600px) {
+    padding: 0.5rem;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 2rem;
   color: #1a1a1a;
   margin-bottom: 2rem;
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const ContentContainer = styled.div`
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 2rem;
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 `;
 
 const StudentList = styled.div`
@@ -25,6 +36,12 @@ const StudentList = styled.div`
   border-radius: 1rem;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 60vh;
+  overflow-y: auto;
+  @media (max-width: 600px) {
+    padding: 0.5rem;
+    max-height: 40vh;
+  }
 `;
 
 const StudentItem = styled.div`

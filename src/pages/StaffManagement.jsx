@@ -27,6 +27,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import Chip from '@mui/material/Chip';
 
 import { getAllStaff, registerStaff, deleteStaff, getAllModules, assignStaffToModule } from '../services/api';
 
@@ -40,11 +41,10 @@ const StaffManagement = () => {
   const [openAssignDialog, setOpenAssignDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
-  const [selectedModule, setSelectedModule] = useState('');
+  const [selectedModules, setSelectedModules] = useState([]);
   const [newStaffData, setNewStaffData] = useState({
     name: '',
-    email: '',
-    location: ''
+    email: ''
   });
 
   useEffect(() => {
@@ -77,8 +77,7 @@ const StaffManagement = () => {
   const handleOpenAddDialog = () => {
     setNewStaffData({
       name: '',
-      email: '',
-      location: ''
+      email: ''
     });
     setOpenAddDialog(true);
   };
@@ -89,7 +88,7 @@ const StaffManagement = () => {
 
   const handleOpenAssignDialog = (staff) => {
     setSelectedStaff(staff);
-    setSelectedModule('');
+    setSelectedModules(staff.modules || []);
     setOpenAssignDialog(true);
   };
 
@@ -147,12 +146,16 @@ const StaffManagement = () => {
   const handleAssignStaff = async () => {
     try {
       setLoading(true);
-      await assignStaffToModule(selectedModule, selectedStaff._id);
+      // Assign each selected module to the staff member
+      await Promise.all(selectedModules.map(moduleId => 
+        assignStaffToModule(moduleId, selectedStaff._id)
+      ));
       setOpenAssignDialog(false);
-      setSuccess('Staff assigned to module successfully');
+      fetchStaff();
+      setSuccess('Staff assigned to modules successfully');
     } catch (error) {
       console.error('Error assigning staff:', error);
-      setError('Failed to assign staff to module');
+      setError('Failed to assign staff to modules');
     } finally {
       setLoading(false);
     }
@@ -208,7 +211,7 @@ const StaffManagement = () => {
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Email</TableCell>
-                  <TableCell>Location</TableCell>
+                  <TableCell>Assigned Modules</TableCell>
                   <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -230,12 +233,29 @@ const StaffManagement = () => {
                     <TableRow key={staffMember._id}>
                       <TableCell>{staffMember.name}</TableCell>
                       <TableCell>{staffMember.email}</TableCell>
-                      <TableCell>{staffMember.location}</TableCell>
+                      <TableCell>
+                        {staffMember.modules && staffMember.modules.length > 0 ? (
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                            {staffMember.modules.map(moduleId => {
+                              const module = modules.find(m => m._id === moduleId);
+                              return module ? (
+                                <Chip 
+                                  key={moduleId} 
+                                  label={module.title}
+                                  size="small"
+                                />
+                              ) : null;
+                            })}
+                          </Box>
+                        ) : (
+                          'No modules assigned'
+                        )}
+                      </TableCell>
                       <TableCell align="center">
                         <IconButton 
                           color="primary" 
                           onClick={() => handleOpenAssignDialog(staffMember)}
-                          title="Assign to module"
+                          title="Assign to modules"
                         >
                           Assign
                         </IconButton>
@@ -285,17 +305,6 @@ const StaffManagement = () => {
             onChange={handleNewStaffChange}
             required
           />
-          <TextField
-            margin="dense"
-            name="location"
-            label="Location"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newStaffData.location}
-            onChange={handleNewStaffChange}
-            required
-          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseAddDialog}>Cancel</Button>
@@ -307,23 +316,34 @@ const StaffManagement = () => {
 
       {/* Assign Staff Dialog */}
       <Dialog open={openAssignDialog} onClose={handleCloseAssignDialog}>
-        <DialogTitle>Assign Staff to Module</DialogTitle>
+        <DialogTitle>Assign Staff to Modules</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Assign {selectedStaff?.name} to a training module.
+            Assign {selectedStaff?.name} to training modules.
           </DialogContentText>
           <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="module-select-label">Training Module</InputLabel>
+            <InputLabel id="modules-select-label">Training Modules</InputLabel>
             <Select
-              labelId="module-select-label"
-              id="module-select"
-              value={selectedModule}
-              label="Training Module"
-              onChange={(e) => setSelectedModule(e.target.value)}
+              labelId="modules-select-label"
+              id="modules-select"
+              multiple
+              value={selectedModules}
+              label="Training Modules"
+              onChange={(e) => setSelectedModules(e.target.value)}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((moduleId) => {
+                    const module = modules.find(m => m._id === moduleId);
+                    return module ? (
+                      <Chip key={moduleId} label={module.title} size="small" />
+                    ) : null;
+                  })}
+                </Box>
+              )}
             >
               {modules.map((module) => (
                 <MenuItem key={module._id} value={module._id}>
-                  {module.title} ({module.location || 'No location'})
+                  {module.title} ({module.location})
                 </MenuItem>
               ))}
             </Select>
@@ -331,7 +351,7 @@ const StaffManagement = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseAssignDialog}>Cancel</Button>
-          <Button onClick={handleAssignStaff} disabled={!selectedModule || loading}>
+          <Button onClick={handleAssignStaff} disabled={loading}>
             {loading ? <CircularProgress size={24} /> : 'Assign'}
           </Button>
         </DialogActions>

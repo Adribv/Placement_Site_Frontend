@@ -9,6 +9,11 @@ const Container = styled.div`
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   max-width: 48rem;
   margin: 0 auto;
+  @media (max-width: 600px) {
+    padding: 0.5rem;
+    max-width: 100vw;
+    border-radius: 0;
+  }
 `;
 
 const Title = styled.h2`
@@ -16,12 +21,19 @@ const Title = styled.h2`
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: #111827;
+  @media (max-width: 600px) {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  @media (max-width: 600px) {
+    gap: 1rem;
+  }
 `;
 
 const FormGroup = styled.div`
@@ -78,9 +90,9 @@ const FileInputLabel = styled.label`
   border-radius: 0.375rem;
   cursor: pointer;
   transition: all 150ms;
-
-  &:hover {
-    background-color: #e5e7eb;
+  @media (max-width: 600px) {
+    padding: 0.5rem;
+    font-size: 0.95rem;
   }
 `;
 
@@ -98,6 +110,10 @@ const Button = styled.button`
   font-weight: 500;
   cursor: pointer;
   transition: background-color 150ms;
+  width: 100%;
+  @media (min-width: 601px) {
+    width: auto;
+  }
 
   &:hover {
     background-color: #1d4ed8;
@@ -176,9 +192,6 @@ const departmentOptions = ['CSE', 'IT', 'MECH', 'EEE', 'ECE', 'BIOTECH', 'CIVIL'
 const BulkUpload = () => {
   const [mode, setMode] = useState('bulk'); // 'bulk' or 'individual'
   const [selectedFile, setSelectedFile] = useState(null);
-  const [batch, setBatch] = useState('');
-  const [passoutYear, setPassoutYear] = useState('');
-  const [department, setDepartment] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -190,12 +203,6 @@ const BulkUpload = () => {
     passoutYear: '',
     department: '',
     location: ''
-  });
-  const [formData, setFormData] = useState({
-    batch: 'General',
-    passoutYear: new Date().getFullYear() + 4,
-    department: 'CSE',
-    location: '',
   });
 
   const handleFileChange = (e) => {
@@ -228,31 +235,12 @@ const BulkUpload = () => {
       return;
     }
 
-    if (!batch) {
-      setError('Please select a batch');
-      return;
-    }
-
-    if (!passoutYear) {
-      setError('Please enter passout year');
-      return;
-    }
-
-    if (!department) {
-      setError('Please select a department');
-      return;
-    }
-
     try {
       setIsLoading(true);
-      console.log(department)
-      await bulkRegisterStudents(selectedFile, batch, passoutYear, department, formData.location);
+      await bulkRegisterStudents(selectedFile);
       setSuccess('Students registered successfully');
       // Reset form
       setSelectedFile(null);
-      setBatch('');
-      setPassoutYear('');
-      setDepartment('');
       // Reset file input
       const fileInput = document.getElementById('excel-file');
       if (fileInput) fileInput.value = '';
@@ -329,63 +317,6 @@ const BulkUpload = () => {
               <span>Choose file</span>
               {selectedFile && <FileName>{selectedFile.name}</FileName>}
             </FileInputLabel>
-          </FormGroup>
-
-          <FormGroup>
-            <Label>Batch</Label>
-            <Select
-              value={batch}
-              onChange={(e) => setBatch(e.target.value)}
-            >
-              <option value="">Select Batch</option>
-              {batchTypes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </Select>
-          </FormGroup>
-
-          <FormGroup>
-            <Label>Department</Label>
-            <Select
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-            >
-              <option value="">Select Department</option>
-              {departmentOptions.map((dep) => (
-                <option key={dep} value={dep}>
-                  {dep}
-                </option>
-              ))}
-            </Select>
-          </FormGroup>
-
-          <FormGroup>
-            <Label>Passout Year</Label>
-            <Select
-              value={passoutYear}
-              onChange={(e) => setPassoutYear(e.target.value)}
-            >
-              <option value="">Select Year</option>
-              {Array.from({ length: 5 }, (_, i) => new Date().getFullYear() + i).map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </Select>
-          </FormGroup>
-
-          <FormGroup>
-            <Label htmlFor="location">Location</Label>
-            <Input
-              id="location"
-              name="location"
-              type="text"
-              value={formData.location}
-              onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-              required
-            />
           </FormGroup>
 
           {error && <ErrorMessage>{error}</ErrorMessage>}
